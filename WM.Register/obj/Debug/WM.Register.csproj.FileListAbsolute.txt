@@ -54,8 +54,8 @@ D:\Project_VS2015\WM.Register\WM.Register\bin\Antlr3.Runtime.pdb
 D:\Project_VS2015\WM.Register\WM.Register\bin\Newtonsoft.Json.xml
 D:\Project_VS2015\WM.Register\WM.Register\obj\Debug\WM.Register.dll
 D:\Project_VS2015\WM.Register\WM.Register\obj\Debug\WM.Register.pdb
-D:\Project_VS2015\WM.Register\WM.Register\obj\Debug\WM.Register.csprojResolveAssemblyReference.cache
 D:\Project_VS2015\WM.Register\WM.Register\bin\PagedList.dll
 D:\Project_VS2015\WM.Register\WM.Register\bin\PagedList.Mvc.dll
 D:\Project_VS2015\WM.Register\WM.Register\bin\PagedList.xml
 D:\Project_VS2015\WM.Register\WM.Register\bin\PagedList.Mvc.xml
+D:\Project_VS2015\WM.Register\WM.Register\obj\Debug\WM.Register.csprojResolveAssemblyReference.cache

@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using System.Web.Security;
 using WM.Register.MD5;
 using WM.Register.Models;
+using WM.Register.ServerMail;
 
 namespace WM.Register.Controllers
 {
@@ -100,11 +101,47 @@ namespace WM.Register.Controllers
         }
         [HttpPost]
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
-        public ActionResult ForgotPassword(srv_VNOGateWay_Merchant model)
+        //[ValidateAntiForgeryToken]
+        public ActionResult ForgotPassword(string email)
         {
-            Guid.NewGuid();
+            //gui link kem tocken den mail cua merchant
+            //generate tocken theo email
+            string To = email, FromEmail, Password, SMTPPort, Host;
+            string token = (email + " "+ DateTime.Now.AddMinutes(10).Ticks).ToString()+" "+ Common.ComputeSha256Hash((email + " "+ DateTime.Now.AddMinutes(10)).ToString()+" "+"webmoney.com.vn");
+            var lnkHref = "<a href='" + Url.Action("ResetPassword", "Login", new { email=email, code = token }, "http") + "'>Reset Password</a>";
+            string subject = "Your changed password";
+
+            string body = "Please find the Password Reset Link." +" "+ lnkHref;
+
+
+
+            //Get and set the AppSettings using configuration manager.  
+
+            EmailManager.AppSettings(out FromEmail, out Password, out SMTPPort, out Host);
+
+
+            //Call send email methods.  
+
+            EmailManager.SendEmail(FromEmail, subject, body, To, FromEmail, Password, SMTPPort, Host);      
+            return View();
+        }
+        public ActionResult ResetPassword(string code, string email)
+        {
+            //so sanh voi tocken duoc gui o email
+            //hien thi form 
+            if(code == null)
+            {
+
+            }
+            srv_VNOGateWay_Merchant model = new srv_VNOGateWay_Merchant();
+            model.code = code;
             return View(model);
+        }
+        [HttpPost]
+        public ActionResult ResetPassword(srv_VNOGateWay_Merchant model)
+        {
+            //thuc hien change pass va luu xuong data voi pass moi
+            return View();
         }
     }
 }
