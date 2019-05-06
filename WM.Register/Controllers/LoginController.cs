@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -93,15 +94,17 @@ namespace WM.Register.Controllers
             }
 
         }
-        public ActionResult ForgetPassword()
+        public ActionResult ForgotPassword()
         {
             return View();
         }
         [HttpPost]
-        public ActionResult ForgetPassword(string email)
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public ActionResult ForgotPassword(srv_VNOGateWay_Merchant model)
         {
-          
-            return View();
+            Guid.NewGuid();
+            return View(model);
         }
     }
 }
