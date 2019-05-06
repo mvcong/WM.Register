@@ -107,7 +107,7 @@ namespace WM.Register.Controllers
             //gui link kem tocken den mail cua merchant
             //generate tocken theo email
             string To = email, FromEmail, Password, SMTPPort, Host;
-            string token = (email + " "+ DateTime.Now.AddMinutes(10).Ticks).ToString()+" "+ Common.ComputeSha256Hash((email + " "+ DateTime.Now.AddMinutes(10)).ToString()+" "+"webmoney.com.vn");
+            string token = (email +" "+ DateTime.Now.AddMinutes(10).Ticks).ToString()+" "+ Common.ComputeSha256Hash((email +" "+ DateTime.Now.AddMinutes(10)).ToString()+" "+"webmoney.com.vn");
             var lnkHref = "<a href='" + Url.Action("ResetPassword", "Login", new { email=email, code = token }, "http") + "'>Reset Password</a>";
             string subject = "Your changed password";
 

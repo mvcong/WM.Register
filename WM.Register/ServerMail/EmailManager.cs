@@ -24,6 +24,7 @@ namespace WM.Register.ServerMail
             mail.From = new MailAddress(From);
             mail.Subject = Subject;
             mail.Body = Body;
+            mail.IsBodyHtml = true;
             SmtpClient smtp = new SmtpClient();
             smtp.Host = Host;
             smtp.Port = Convert.ToInt16(SMTPPort);
