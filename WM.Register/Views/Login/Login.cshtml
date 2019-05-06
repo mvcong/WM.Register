@@ -1,0 +1,86 @@
+﻿
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-latest.pack.js"></script>
+<h2>Login Merchant</h2>
+@using (Ajax.BeginForm("Login", "Login", new AjaxOptions { HttpMethod = "POST", OnSuccess = "onAjaxRequestSuccess" }, new { @id = "AjaxformId", @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal" style="height:200px; width:300px">
+        <div class="form-group">
+            <input id="txtEmail" class="form-control" placeholder="Email Merchant"
+                   name="merchant_email" type="email" autofocus>
+        </div>
+        <div class="form-group">
+            <input class="form-control" placeholder="Password"
+                   name="password" type="password" value="">
+        </div>
+        <!-- Change this to a button or input when using this as a form -->
+        <div class="form-group">
+            <div class="right" style="width:150px">
+                <button type="submit" class="btn  btn-success btn-block">Login</button>
+            </div>
+        </div>
+        <div>
+            @Html.ActionLink("Register as a Merchant", "Register","Register")
+        </div>
+        <div>
+            @Html.ActionLink("Forgot Password?","ForgotPassword")
+        </div>
+    </div>
+}
+@*@section Scripts {
+
+        @Scripts.Render("~/bundles/jqueryval")
+    }*@
+<script language="javascript">
+    $(document).ready(function () {
+        $("#AjaxformId").submit(function (event) {
+            var dataString;
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var action = $("#AjaxformId").attr("action");
+            // Setting.
+            dataString = new FormData($("#AjaxformId").get(0));
+            contentType = false;
+            processData = false;
+            $.ajax({
+                type: "POST",
+                url: action,
+                data: dataString,
+                dataType: "json",
+                contentType: contentType,
+                processData: processData,
+                success: function (result) {
+                    // Result.
+                    //alert("success!");
+                    //onAjaxRequestSuccess(result);
+                    //window.location.href = "localhost:Register/Index";
+                    var newURL = window.location.protocol + "//" + window.location.host + "/" + "Home/Index";
+                    window.location.href = newURL;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    //do your own thing
+                    alert("Email or Password false! Pls Check again!!!");
+                }
+            });
+        }); //end .submit()
+    });
+    //var onAjaxRequestSuccess = function (result) {
+    //    if (result.EnableError) {
+    //        // Setting.
+    //        alert(result.ErrorMsg);
+    //    } else if (result.EnableSuccess) {
+    //        // Setting.
+    //        alert(result.SuccessMsg);
+    //        // Resetting form.
+    //        $('#AjaxformId').get(0).reset();
+    //    }
+    //}
+
+</script>
+
+

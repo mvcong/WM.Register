@@ -1,0 +1,105 @@
+﻿
+@{
+    ViewBag.Title = "Change Password";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript" src="https://code.jquery.com/jquery-latest.pack.js"></script>
+<h2>Change Password</h2>
+<script>   
+        $(document).ready(function () {
+            $("#confirm").keyup(validate);           
+        });        
+        function validate() {
+            var newpass = $("#newPass").val();
+            var confirm = $("#confirm").val();
+
+            if (newpass == confirm) {
+
+                $("#isValidate").text("valid");
+                document.getElementById("isValidate").style.color = "green";
+                $(".right").show();
+            }
+            else {
+                $("#isValidate").text("invalid");
+                document.getElementById("isValidate").style.color = "red";
+                $(".right").hide();
+            }            
+        }       
+</script>
+@using (Ajax.BeginForm("ChangePass", "Login", new AjaxOptions { HttpMethod = "POST", OnSuccess = "onAjaxRequestSuccess" }, new { @id = "AjaxformId", @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal" style="height:200px; width:300px">
+        <div class="form-group">
+            <input id="passOld" class="form-control" placeholder="Password Old"
+                   name="OldPass" type="password" autofocus required>
+        </div>
+        <p id="message"></p>
+        <div class="form-group">
+            <input id="newPass" class="form-control" placeholder="New Password"
+                   name="newPass" type="password" value="" minlength="8" maxlength="20" lang="en" required>
+        </div>
+        <div class="form-group">
+            <input id="confirm" class="form-control" placeholder="Confirm Password"
+                   name="confirmPassword" type="password" value="" required>
+        </div>
+        <p id="isValidate"></p>
+        <!-- Change this to a button or input when using this as a form -->
+        <div class="form-group">
+            <div class="right" style="width:150px">
+                <button type="submit" class="btn  btn-success btn-block">Change Password</button>
+            </div>
+        </div>
+    </div>
+}
+<script language="javascript">
+    $(document).ready(function () {
+        $("#AjaxformId").submit(function (event) {
+            var dataString;
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var action = $("#AjaxformId").attr("action");
+            // Setting.
+            //dataString = new FormData($("#AjaxformId").get(0));
+            data = {
+                newpass: $("#newPass").val(),
+                oldpass: $("#passOld").val(),
+                @*useId: @((User as WebIPrincipal).User.id),*@
+            };
+            $.ajax({
+                type: "POST",
+                url: action,
+                data: data,
+                success: function (result) {
+                    if (result == "Wrong Password") {
+                        alert("Password Old Fail")
+                    } else {
+                        alert("Change Success!")
+                        var newURL = window.location.protocol + "//" + window.location.host + "/" + "Home/Index";
+                        window.location.href = newURL;
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    //do your own thing
+                    alert("Change Fail!");
+                }
+            });
+        }); //end .submit()
+    });
+    //var onAjaxRequestSuccess = function (result) {
+    //    if (result.EnableError) {
+    //        // Setting.
+    //        alert(result.ErrorMsg);
+    //    } else if (result.EnableSuccess) {
+    //        // Setting.
+    //        alert(result.SuccessMsg);
+    //        // Resetting form.
+    //        $('#AjaxformId').get(0).reset();
+    //    }
+    //}
+
+</script>
+
+
+
+

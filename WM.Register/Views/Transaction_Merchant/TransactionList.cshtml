@@ -1,0 +1,74 @@
+﻿@model IEnumerable<WM.Register.Models.srv_VNOGateway_transactions>
+@{
+    ViewBag.Title = "TransactionList";
+}
+
+<h2>TransactionList</h2>
+
+<div class="row" style="padding-top:20px">
+    <div class="col-md-12">
+        <h4>Merchant Transaction</h4>             
+        <div class="row">
+            <table class="table table-striped" border="0" style="width: 70%!important;margin-left:10px">
+                <tr>
+                    <th>
+                        Mã Transaction
+                    </th>
+                    <th>
+                        Status
+                    </th>
+                    <th>
+                        Customer Id
+                    </th>
+                    <th>
+                        Merchant Id
+                    </th>
+                    <th>
+                        Decription
+                    </th>
+                    <th>
+                        Total Amount
+                    </th> 
+                    <th>
+                        Create Date
+                    </th>
+                    <th>
+                        Update Date
+                    </th>            
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.pay_status)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.customer_id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.merchant_id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.total_amount)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.created_date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.updated_date)
+                        </td>
+                    </tr>
+
+                }
+            </table>
+        </div>
+    </div>
+</div>
+
+

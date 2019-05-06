@@ -1,0 +1,117 @@
+﻿@model PagedList.IPagedList<WM.Register.Models.srv_VNOGateWay_Merchant>
+@using PagedList;
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Merchant List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<h2>Index</h2>*@
+@*@if (Model != null)*@
+@*{*@
+<div class="row" style="padding-top:20px">
+    <div class="col-md-12">
+        <h2>Merchant information</h2>
+        <div class="row">
+            <table class="table table-striped" border="0" style="width: 70%!important;margin-left:10px">
+                <tr>
+                    <th>
+                        Xử Lý
+                    </th>
+                    <th>
+                        Merchant ID
+                        @*<td>@Model.id</td>*@
+                    </th>
+                    <th>
+                        Merchant Name
+                        @*<td>@Model.merchant_name</td>*@
+                    </th>
+                    <th>
+                        Merchant Code
+                        @*<td>@Model.merchant_code</td>*@
+                    </th>
+                    <th>
+                        Password
+                        @*<td>@Model.password</td>*@
+                    </th>
+                    <th>
+                        Merchant Site
+                        @*<td>@Model.merchant_website</td>*@
+                    </th>
+                    <th>
+                        Merchant Email
+                        @*<td>@Model.merchant_email</td>*@
+                    </th>
+                    <th>
+                        Merchant Email Report
+                        @*<td>@Model.merchant_report_email</td>*@
+                    </th>
+                    <th>
+                        Merchant Phone
+                        @*<td>@Model.merchant_phone</td>*@
+                    </th>
+                    <th>
+                        Create Date
+                        @*<td>@Model.created_date</td>*@
+                    </th>
+
+                    <th>
+                        Update Date
+                        @*<td>@Model.updated_date</td>*@
+                    </th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.id }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.id }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.id }@*, new { id = "delete" }*@)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.id)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.merchant_name)
+                        </td>
+                        <td align="center">
+                            @Html.DisplayFor(modelItem => item.merchant_code)
+                        </td>
+                        <td align="center">
+                            @Html.Raw("\u2022\u2022\u2022\u2022\u2022")
+                            @*@Html.DisplayFor(modelItem => item.password)*@
+                        </td>
+                        <td align="center">
+                            @Html.DisplayFor(modelItem => item.merchant_website)
+                        </td>
+                        <td align="center">
+                            @Html.DisplayFor(modelItem => item.merchant_email)
+                        </td>
+                        <td align="center">
+                            @Html.DisplayFor(modelItem => item.merchant_report_email)
+                        </td>
+                        <td align="center">
+                            @Html.DisplayFor(modelItem => item.merchant_phone)
+                        </td>
+                        <td align="center">
+                            @Html.DisplayFor(modelItem => item.created_date)
+                        </td>
+                        <td align="center">
+                            @Html.DisplayFor(modelItem => item.updated_date)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+        <br />
+    </div>
+</div>
+<div id="container" style="margin-left: 20px">
+    <p></p>
+    <p></p>
+    <div class="pagination" style="margin-left: 400px">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+        of @Model.PageCount   @Html.PagedListPager(Model, page => Url.Action("Index", new { page }))
+    </div>
+</div>
