@@ -135,11 +135,19 @@ namespace WM.Register.Controllers
             
         }
         [HttpPost]
-        public ActionResult ResetPassword(srv_VNOGateWay_Merchant model, string confirmPassword)
+        public ActionResult ResetPassword(string email, string confirm)
         {
-            var rest = new RegisterDbContext().Database.SqlQuery<srv_VNOGateWay_Merchant>("exec [dbo].[sp_forgotpassword] @forgotpass, @email", new SqlParameter("forgotpass",Common.MD5Hash(confirmPassword)),new SqlParameter("email", model.merchant_email)).FirstOrDefault();
-            //thuc hien change pass va luu xuong data voi pass moi
-            return Json(new { message = "Password has been changed, Login with new password.", status = true });
+            if(email != null)
+            {
+                var rest = new RegisterDbContext().Database.SqlQuery<srv_VNOGateWay_Merchant>("exec [dbo].[sp_forgotpassword] @forgotpass, @email", new SqlParameter("forgotpass", Common.MD5Hash(confirm)), new SqlParameter("email", email)).FirstOrDefault();
+                //thuc hien change pass va luu xuong data voi pass moi
+                return Json(new { message = "Password has been changed, Login with new password.", status = true });
+            }
+            else
+            {
+                return Json(new { message = "Password not change.", status = true });
+            }
+            
         }
     }
 }

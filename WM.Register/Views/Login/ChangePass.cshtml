@@ -5,7 +5,7 @@
 }
 <script type="text/javascript" src="https://code.jquery.com/jquery-latest.pack.js"></script>
 <h2>Change Password</h2>
-<script>   
+@*<script>   
         $(document).ready(function () {
             $("#confirm").keyup(validate);           
         });        
@@ -25,7 +25,7 @@
                 $(".right").hide();
             }            
         }       
-</script>
+</script>*@
 @using (Ajax.BeginForm("ChangePass", "Login", new AjaxOptions { HttpMethod = "POST", OnSuccess = "onAjaxRequestSuccess" }, new { @id = "AjaxformId", @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
@@ -55,6 +55,12 @@
 <script language="javascript">
     $(document).ready(function () {
         $("#AjaxformId").submit(function (event) {
+            var pass1 = $("#newPass").val();
+            var pass2 = $("#confirm").val();
+            if (pass1 != pass2) {
+                alert("Password Wrong");
+                return;
+            }
             var dataString;
             event.preventDefault();
             event.stopImmediatePropagation();
