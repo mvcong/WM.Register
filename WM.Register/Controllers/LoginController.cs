@@ -34,7 +34,7 @@ namespace WM.Register.Controllers
                     if (logined != null)
                     {
                         FormsAuthentication.SetAuthCookie(srv_VNOGateWay_Merchant.merchant_email, false);
-                       
+
                         FormsAuthenticationTicket ticket = new FormsAuthenticationTicket(1, srv_VNOGateWay_Merchant.merchant_email, DateTime.Now, DateTime.Now.AddMinutes(30), false, JsonConvert.SerializeObject(logined));
                         string encryptForm = FormsAuthentication.Encrypt(ticket);
                         HttpCookie httpCookie = new HttpCookie(FormsAuthentication.FormsCookieName, encryptForm);
@@ -74,10 +74,10 @@ namespace WM.Register.Controllers
         [Authorize]
         [HttpPost]
         public ActionResult ChangePass(string newPass, string oldPass/*, srv_VNOGateWay_Merchant srv_VNOGateWay_Merchant*/)
-        {          
+        {
             if (User.Identity.IsAuthenticated)
             {
-                if(Common.MD5Hash(oldPass) == ((User as WebIPrincipal).User.password))
+                if (Common.MD5Hash(oldPass) == ((User as WebIPrincipal).User.password))
                 {
                     var change = new RegisterDbContext().Database.SqlQuery<srv_VNOGateWay_Merchant>("exec [dbo].[ChangePasswordMerchant] @id, @NewPassword, @OldPass", new SqlParameter("id", (User as WebIPrincipal).User.id), new SqlParameter("NewPassword", Common.MD5Hash(newPass)), new SqlParameter("OldPass", Common.MD5Hash(oldPass))).FirstOrDefault();
                     FormsAuthentication.SignOut();
@@ -87,7 +87,7 @@ namespace WM.Register.Controllers
                 {
                     return Json("Wrong Password", JsonRequestBehavior.AllowGet);
                 }
-                
+
             }
             else
             {
@@ -102,46 +102,44 @@ namespace WM.Register.Controllers
         [HttpPost]
         [AllowAnonymous]
         //[ValidateAntiForgeryToken]
-        public ActionResult ForgotPassword(string email)
+        public ActionResult ForgotPassword(string merchant_email)
         {
             //gui link kem tocken den mail cua merchant
             //generate tocken theo email
-            string To = email, FromEmail, Password, SMTPPort, Host;
-            string token = (email +" "+ DateTime.Now.AddMinutes(10).Ticks).ToString()+" "+ Common.ComputeSha256Hash((email +" "+ DateTime.Now.AddMinutes(10)).ToString()+" "+"webmoney.com.vn");
-            var lnkHref = "<a href='" + Url.Action("ResetPassword", "Login", new { email=email, code = token }, "http") + "'>Reset Password</a>";
+            long time = DateTime.Now.AddMinutes(10).Ticks;
+            string To = merchant_email, FromEmail, Password, SMTPPort, Host;
+            string token = (merchant_email + " " + time.ToString() + " " + Common.ComputeSha256Hash((merchant_email + " " + time.ToString() + " " + "webmoney.com.vn")));
+            var lnkHref = "<a href='" + Url.Action("ResetPassword", "Login", new { email = merchant_email, time = time, code = token }, "http") + "'>Reset Password</a>";
             string subject = "Your changed password";
-
-            string body = "Please find the Password Reset Link." +" "+ lnkHref;
-
-
-
-            //Get and set the AppSettings using configuration manager.  
-
+            string body = "Dear" + " " + merchant_email + "," + "<br><br><br> Please click on the link to change your password. <br> Your link:" + lnkHref + " <br><br><br>Sincerely,<br>Administrator<br><i>Note: This is an auto-generated email, please do not reply.</i>";
             EmailManager.AppSettings(out FromEmail, out Password, out SMTPPort, out Host);
-
-
-            //Call send email methods.  
-
-            EmailManager.SendEmail(FromEmail, subject, body, To, FromEmail, Password, SMTPPort, Host);      
-            return View();
+            EmailManager.SendEmail(FromEmail, subject, body, To, FromEmail, Password, SMTPPort, Host);
+            return Json(new { message = "Chúng tôi đã gửi link về mail của quý khách, vui lòng kiểm tra mail.", status = true });
         }
-        public ActionResult ResetPassword(string code, string email)
+        public ActionResult ResetPassword(string code, string email, long time)
         {
+            string tokenconfirm = (email + " " + time.ToString() + " " + Common.ComputeSha256Hash((email + " " + time.ToString() + " " + "webmoney.com.vn")));
             //so sanh voi tocken duoc gui o email
             //hien thi form 
-            if(code == null)
+            if (code == tokenconfirm && time >= DateTime.Now.Ticks)
             {
-
+                srv_VNOGateWay_Merchant model = new srv_VNOGateWay_Merchant();
+                //model.code = code;
+                model.merchant_email = email;
+                return View(model);
             }
-            srv_VNOGateWay_Merchant model = new srv_VNOGateWay_Merchant();
-            model.code = code;
-            return View(model);
+            else
+            {
+                return HttpNotFound();
+            }
+            
         }
         [HttpPost]
-        public ActionResult ResetPassword(srv_VNOGateWay_Merchant model)
+        public ActionResult ResetPassword(srv_VNOGateWay_Merchant model, string confirmPassword)
         {
+            var rest = new RegisterDbContext().Database.SqlQuery<srv_VNOGateWay_Merchant>("exec [dbo].[sp_forgotpassword] @forgotpass, @email", new SqlParameter("forgotpass",Common.MD5Hash(confirmPassword)),new SqlParameter("email", model.merchant_email)).FirstOrDefault();
             //thuc hien change pass va luu xuong data voi pass moi
-            return View();
+            return Json(new { message = "Password has been changed, Login with new password.", status = true });
         }
     }
 }

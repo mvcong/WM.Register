@@ -20,7 +20,7 @@ namespace WM.Register.DAO
         //Them moi mot merchant
         public static List<srv_VNOGateWay_Merchant> InsertMerchant(srv_VNOGateWay_Merchant srv_VNOGateWay_Merchant)
         {
-            var list = new RegisterDbContext().Database.SqlQuery<srv_VNOGateWay_Merchant>("exec [dbo].[Insertsrv_VNOGateWay_Merchant] @merchant_name,@merchant_code,@password,@merchant_website,@merchant_email,@merchant_report_email,@merchant_phone,@merchant_wmid,@merchant_purse,@merchant_result_url,@merchant_cancel_url,@merchant_error_url,@merchant_secret_key,@merchant_key_hash,@merchant_address,@merchant_token,@ip_addresses,@accept_hosts,@logo,@merchant_secret_key_x20,@merchant_account",
+            var list = new RegisterDbContext().Database.SqlQuery<srv_VNOGateWay_Merchant>("exec [dbo].[Insertsrv_VNOGateWay_Merchant] @merchant_name,@merchant_code,@password,@merchant_website,@merchant_email,@merchant_report_email,@merchant_phone,@merchant_wmid,@merchant_purse,@merchant_result_url,@merchant_cancel_url,@merchant_error_url,@merchant_secret_key,@merchant_key_hash,@merchant_address,@merchant_token,@ip_addresses,@accept_hosts,@logo,@merchant_secret_key_x20",
                 new SqlParameter("merchant_name", srv_VNOGateWay_Merchant.merchant_name),
                 new SqlParameter("merchant_code", srv_VNOGateWay_Merchant.merchant_code),
                 new SqlParameter("password", Common.MD5Hash(srv_VNOGateWay_Merchant.password)),
@@ -40,8 +40,7 @@ namespace WM.Register.DAO
                 new SqlParameter("ip_addresses", srv_VNOGateWay_Merchant.ip_addresses),
                 new SqlParameter("accept_hosts", srv_VNOGateWay_Merchant.accept_hosts),
                 new SqlParameter("logo", srv_VNOGateWay_Merchant.logo),
-                new SqlParameter("merchant_secret_key_x20", srv_VNOGateWay_Merchant.merchant_secret_key_x20),
-                new SqlParameter("merchant_account", srv_VNOGateWay_Merchant.merchant_account)).ToList();
+                new SqlParameter("merchant_secret_key_x20", srv_VNOGateWay_Merchant.merchant_secret_key_x20)).ToList();
             return list;
         }
         //Chinh sua mot merchant
